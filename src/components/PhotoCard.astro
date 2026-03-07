@@ -1,0 +1,28 @@
+---
+interface Props {
+  image: string;
+  caption: string;
+  category?: string;
+  clickable?: boolean;
+}
+
+const { image, caption, category = '', clickable = false } = Astro.props;
+---
+
+<div class="photo-item" data-category={category}>
+  {clickable ? (
+    <a href="#" class="photo-link" data-image={image} data-caption={caption}>
+      <img src={image} alt={caption} loading="lazy" />
+    </a>
+  ) : (
+    <img src={image} alt={caption} loading="lazy" />
+  )}
+  <p class="photo-caption">{caption}</p>
+</div>
+
+<style>
+  .photo-link {
+    display: block;
+    cursor: zoom-in;
+  }
+</style>

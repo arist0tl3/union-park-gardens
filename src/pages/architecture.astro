@@ -1,0 +1,48 @@
+---
+import { FEATURE_FLAGS } from '../config';
+
+if (!FEATURE_FLAGS.architecturePage) {
+  return Astro.redirect('/');
+}
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+---
+
+<BaseLayout title="Architecture" description="The architectural design of Union Park Gardens — John Nolen's English Garden Suburb vision brought to life.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Architecture" title="<em>Designed</em> to last" />
+    </div>
+  </section>
+
+  <section class="arch-section">
+    <div class="section-inner" style="max-width:960px">
+
+      <div class="arch-grid">
+        <div>
+          <img src="/images/house-layouts.jpg" alt="Seven-family row houses — Ballinger & Perrot, architects" />
+          <p style="font-size:0.8rem;color:var(--warm-gray);font-style:italic;margin-top:0.75rem">Seven-family row houses — Ballinger &amp; Perrot, architects, Philadelphia</p>
+        </div>
+        <div class="arch-text">
+          <h3>The English Garden Suburb</h3>
+          <p>Nolen's design borrowed from the English Garden Suburb movement — a reformist vision of urban housing that prized greenery, human scale, and architectural variety over the monotony of typical worker housing.</p>
+          <p>Curved streets slowed traffic and created a sense of enclosure. A broad tree-lined median on Bancroft Parkway gave residents a common green. Houses were built in clusters with varied setbacks, materials, and rooflines — giving the neighborhood a coherent but never repetitive character.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:4rem">
+        <h3 style="font-family:var(--serif-display);font-size:1.5rem;font-weight:400;margin-bottom:1.25rem">House types</h3>
+        <p>Union Park Gardens includes a variety of house types — row houses, semi-detached homes, and corner units — each designed with different setbacks, materials, and rooflines. This variety gives the neighborhood its distinctive character: coherent but never monotonous.</p>
+        <p>The architects at Ballinger &amp; Perrot designed the houses to be practical and beautiful in equal measure. Brick construction throughout ensured durability. Varied window styles, doorway treatments, and rooflines meant that each block had its own personality.</p>
+      </div>
+
+      <div style="margin-top:4rem">
+        <h3 style="font-family:var(--serif-display);font-size:1.5rem;font-weight:400;margin-bottom:1.25rem">Nolen's planning philosophy</h3>
+        <p>John Nolen believed that the layout of streets and public spaces shaped the quality of life for residents. His plan for Union Park Gardens reflects this conviction at every turn — literally. The curved streets slow traffic and create visual variety. The central median on Bancroft Parkway provides shared green space. Even the placement of houses in staggered clusters was intentional, creating a rhythm of setbacks that gives the neighborhood a feeling of depth and enclosure.</p>
+        <p>These were not decisions driven by aesthetics alone. Nolen understood that worker housing needed to be more than functional — it needed to foster community. A century later, it still does.</p>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>

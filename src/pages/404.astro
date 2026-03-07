@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout title="Page Not Found" description="This page doesn't exist.">
+  <section class="page-header" style="min-height:60vh;display:flex;align-items:center">
+    <div class="section-inner" style="text-align:center">
+      <p class="section-eyebrow">404</p>
+      <div class="rule"><div class="rule-dot"></div></div>
+      <h1 class="section-title">Page not found</h1>
+      <p style="color:var(--warm-gray);margin-bottom:2rem">
+        This page doesn't exist — but the neighborhood does. Come find us.
+      </p>
+      <Button href="/" label="Back to home" variant="dark" />
+    </div>
+  </section>
+</BaseLayout>

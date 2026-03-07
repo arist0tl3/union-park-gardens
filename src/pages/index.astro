@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TimelineItem from '../components/TimelineItem.astro';
+import PhotoCard from '../components/PhotoCard.astro';
+import Button from '../components/Button.astro';
+import { getCollection } from 'astro:content';
+
+const timelineEntries = (await getCollection('timeline')).sort(
+  (a, b) => a.data.sortOrder - b.data.sortOrder
+);
+
+const archiveEntries = (await getCollection('archive')).sort(
+  (a, b) => (a.data.sortDate ?? 0) - (b.data.sortDate ?? 0)
+);
+---
+
+<BaseLayout>
+  <Hero
+    eyebrow="Wilmington, Delaware · Est. 1918"
+    title="Union Park<br /><em>Gardens</em>"
+    subtitle="A neighborhood built in a year, for workers who built a fleet. A community that has endured for more than a century."
+    backgroundImage="/images/hero-map.jpg"
+  />
+
+  <!-- INTRO -->
+  <section class="intro" id="about">
+    <div class="section-inner">
+      <SectionHeader
+        eyebrow="About the Neighborhood"
+        title="A <em>visionary</em> community,<br />built in wartime haste"
+      />
+      <p class="lead">
+        In 1918, with America at war and Wilmington's shipyards running at full capacity, thousands of workers flooded the city with nowhere to live. In response, an extraordinary thing happened: an entire neighborhood was designed, built, and occupied in under a year.
+      </p>
+      <p>
+        Designed by renowned town planner John Nolen in the style of the English Garden Suburb movement, Union Park Gardens was conceived not merely as housing, but as a livable community — with curved streets, green medians, open spaces, and a variety of architectural styles that gave the neighborhood warmth and character from day one.
+      </p>
+      <p>
+        More than a century later, that warmth endures. The brick row houses, the tree-lined parkway, and the close-knit streets that Nolen envisioned remain very much intact — a rare and remarkable survivor in the American urban landscape.
+      </p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="timeline-section">
+    <div class="section-inner">
+      <SectionHeader
+        eyebrow="A Brief History"
+        title="From park grounds<br /><em>to neighborhood</em>"
+        variant="dark"
+      />
+      <div class="timeline">
+        {timelineEntries.map(entry => (
+          <TimelineItem
+            year={entry.data.year}
+            title={entry.data.title}
+            description={entry.data.description}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTOS -->
+  <section class="photos-section" id="photos">
+    <div class="section-inner" style="max-width:960px">
+      <SectionHeader eyebrow="Photo Archive" title="<em>Then</em> &amp; now" />
+      <div class="photo-grid">
+        {archiveEntries.map(entry => (
+          <PhotoCard
+            image={entry.data.image}
+            caption={entry.data.caption}
+            category={entry.data.category}
+          />
+        ))}
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <Button href="/archive" label="View full archive" variant="dark" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="arch-section" id="architecture">
+    <div class="section-inner" style="max-width:960px">
+      <SectionHeader eyebrow="Architecture" title="<em>Designed</em> to last" />
+      <div class="arch-grid">
+        <div>
+          <img src="/images/house-layouts.jpg" alt="Seven-family row houses — Ballinger & Perrot, architects" />
+          <p style="font-size:0.8rem;color:var(--warm-gray);font-style:italic;margin-top:0.75rem">Seven-family row houses — Ballinger &amp; Perrot, architects, Philadelphia</p>
+        </div>
+        <div class="arch-text">
+          <h3>The English Garden Suburb</h3>
+          <p>Nolen's design borrowed from the English Garden Suburb movement — a reformist vision of urban housing that prized greenery, human scale, and architectural variety over the monotony of typical worker housing.</p>
+          <p>Curved streets slowed traffic and created a sense of enclosure. A broad tree-lined median on Bancroft Parkway gave residents a common green. Houses were built in clusters with varied setbacks, materials, and rooflines — giving the neighborhood a coherent but never repetitive character.</p>
+          <p>That these houses were built in wartime haste — by nearly 4,000 workers, with horses and wagons, in under a year — makes them no less beautiful. They were built to last, and they have.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY CTA -->
+  <section class="community-section" id="community">
+    <div class="section-inner">
+      <SectionHeader
+        eyebrow="Get Involved"
+        title="This is <em>your</em> neighborhood"
+        variant="dark"
+      />
+      <p>
+        Union Park Gardens has always been a place where neighbors know each other. Whether you've lived here for decades or just moved in, there's a place for you in this community.
+      </p>
+      <p>
+        We're organizing cleanup days, building a photo archive, and looking for people who want to help preserve and celebrate what makes this neighborhood special. And yes — the cats are welcome too.
+      </p>
+      <div class="cta-group">
+        <Button href="mailto:unionparkgardens@gmail.com" label="Get in touch" variant="light" />
+        <Button href="/archive" label="Explore the archive" variant="light" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

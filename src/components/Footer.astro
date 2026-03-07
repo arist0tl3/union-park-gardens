@@ -1,0 +1,21 @@
+---
+import { FEATURE_FLAGS } from '../config';
+
+const links = [
+  { href: '/history', label: 'History' },
+  { href: '/archive', label: 'Archive' },
+  ...(FEATURE_FLAGS.architecturePage ? [{ href: '/architecture', label: 'Architecture' }] : []),
+  { href: '/community', label: 'Community' },
+  ...(FEATURE_FLAGS.merchPage ? [{ href: '/merch', label: 'Merch' }] : []),
+];
+---
+
+<footer>
+  <div class="footer-logo">Union Park Gardens</div>
+  <ul class="footer-links">
+    {links.map(link => (
+      <li><a href={link.href}>{link.label}</a></li>
+    ))}
+  </ul>
+  <p style="opacity:0.5;font-size:0.75rem">Wilmington, Delaware &middot; Est. 1918</p>
+</footer>

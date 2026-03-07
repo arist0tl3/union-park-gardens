@@ -1,0 +1,21 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  backgroundImage: string;
+}
+
+const { eyebrow, title, subtitle, backgroundImage } = Astro.props;
+---
+
+<div class="hero">
+  <div class="hero-image" style={`background-image: url('${backgroundImage}')`}></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">{eyebrow}</p>
+    <h1 class="hero-title" set:html={title} />
+    <p class="hero-sub">{subtitle}</p>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</div>

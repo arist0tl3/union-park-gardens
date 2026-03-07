@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import PhotoCard from '../components/PhotoCard.astro';
+import { getCollection } from 'astro:content';
+
+const archiveEntries = (await getCollection('archive')).sort(
+  (a, b) => (a.data.sortDate ?? 0) - (b.data.sortDate ?? 0)
+);
+
+const categories = ['all', 'construction', 'architecture', 'community', 'maps'] as const;
+---
+
+<BaseLayout title="Photo Archive" description="Historical photographs and documents from Union Park Gardens — construction, architecture, maps, and community life.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Photo Archive" title="<em>Then</em> &amp; now" />
+    </div>
+  </section>
+
+  <section class="archive-page">
+    <div class="archive-grid">
+      <div class="archive-filters">
+        {categories.map(cat => (
+          <button
+            data-filter={cat}
+            class:list={[{ active: cat === 'all' }]}
+          >
+            {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div class="photo-grid">
+        {archiveEntries.map(entry => (
+          <PhotoCard
+            image={entry.data.image}
+            caption={entry.data.caption}
+            category={entry.data.category}
+            clickable={true}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <dialog class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightbox-close">Close</button>
+      <div class="lightbox-inner">
+        <img id="lightbox-img" src="" alt="" />
+        <p class="photo-caption" id="lightbox-caption"></p>
+      </div>
+    </dialog>
+
+    <!-- Submit a photo -->
+    <div class="submit-section">
+      <h3>Have a photo to share?</h3>
+      <p style="color:var(--warm-gray);font-size:0.95rem;margin-bottom:2rem">
+        We're building an archive of Union Park Gardens — historical photos, documents, and images of the neighborhood today. If you have something to contribute, we'd love to see it.
+      </p>
+      <form name="photo-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="photo-submission" />
+        <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Your name" required class="form-input" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Your email" required class="form-input" />
+        </div>
+        <div class="form-group">
+          <textarea name="description" placeholder="Tell us about the photo — what it shows, when it's from, any story behind it..." class="form-input"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="file" name="photo" accept="image/*" class="form-input" />
+        </div>
+        <button type="submit" class="btn btn-dark">Submit</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Category filters
+  const filterButtons = document.querySelectorAll('.archive-filters button');
+  const photoItems = document.querySelectorAll('.photo-item');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      photoItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          (item as HTMLElement).style.display = '';
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox') as HTMLDialogElement;
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption')!;
+  const lightboxClose = document.getElementById('lightbox-close')!;
+
+  document.querySelectorAll('.photo-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = e.currentTarget as HTMLAnchorElement;
+      lightboxImg.src = el.getAttribute('data-image') || '';
+      lightboxImg.alt = el.getAttribute('data-caption') || '';
+      lightboxCaption.textContent = el.getAttribute('data-caption') || '';
+      lightbox.showModal();
+    });
+  });
+
+  lightboxClose.addEventListener('click', () => lightbox.close());
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.close();
+  });
+</script>

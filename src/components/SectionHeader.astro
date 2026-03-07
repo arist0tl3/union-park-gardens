@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  variant?: 'light' | 'dark';
+}
+
+const { eyebrow, title, variant = 'light' } = Astro.props;
+const dotStyle = variant === 'dark' ? 'background:var(--slate)' : '';
+const ruleStyle = variant === 'dark' ? 'margin:0 auto 2rem' : '';
+---
+
+<p class="section-eyebrow">{eyebrow}</p>
+<div class="rule" style={ruleStyle}>
+  <div class="rule-dot" style={dotStyle}></div>
+</div>
+<h2 class="section-title" set:html={title} />
