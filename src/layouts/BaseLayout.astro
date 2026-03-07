@@ -46,6 +46,28 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
   <Footer />
 
   <script>
+    // Mobile hamburger menu toggle
+    const hamburger = document.querySelector('.nav-hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        const isOpen = hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+
+      // Close menu when a link is tapped
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          mobileMenu.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+
     // Scroll reveal — timeline items fly in from sides with stagger
     const timelineItems = document.querySelectorAll('.timeline-item');
     if (timelineItems.length > 0) {
