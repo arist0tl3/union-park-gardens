@@ -283,25 +283,24 @@ p {
   display: grid;
   grid-template-columns: 140px 40px 1fr;
   gap: 0;
-  align-items: start;
   position: relative;
 }
 
 /* Year column */
 .timeline-year-col {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
   padding-right: 1.5rem;
-  padding-top: 0.1rem;
   padding-bottom: 3rem;
+  text-align: right;
+  line-height: 1.3;
 }
 
 .timeline-year {
   font-family: var(--serif-display);
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
   color: var(--parchment);
+  line-height: 1.3;
   opacity: 0;
   transform: translateX(-20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -318,7 +317,7 @@ p {
   display: flex;
   justify-content: center;
   align-self: stretch;
-  padding-top: 0.35rem;
+  padding-top: 0.45rem;
 }
 
 /* Continuous vertical line */
@@ -379,8 +378,9 @@ p {
   font-size: 1.15rem;
   font-weight: 400;
   color: var(--cream);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
   line-height: 1.3;
+  letter-spacing: 0.01em;
 }
 
 .timeline-body p {
