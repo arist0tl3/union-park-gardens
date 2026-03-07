@@ -46,18 +46,33 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
   <Footer />
 
   <script>
-    // Scroll reveal
-    const items = document.querySelectorAll('.timeline-item, .photo-item');
-    if (items.length > 0) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
+    // Scroll reveal — timeline items fly in from sides with stagger
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    if (timelineItems.length > 0) {
+      const tlObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('visible'), i * 80);
-            observer.unobserve(entry.target);
+            const idx = parseInt((entry.target as HTMLElement).dataset.index || '0', 10);
+            setTimeout(() => entry.target.classList.add('visible'), idx * 150);
+            tlObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+      timelineItems.forEach(item => tlObserver.observe(item));
+    }
+
+    // Scroll reveal — photo items fade up
+    const photoItems = document.querySelectorAll('.photo-item');
+    if (photoItems.length > 0) {
+      const photoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            photoObserver.unobserve(entry.target);
           }
         });
       }, { threshold: 0.1 });
-      items.forEach(item => observer.observe(item));
+      photoItems.forEach(item => photoObserver.observe(item));
     }
   </script>
 </body>

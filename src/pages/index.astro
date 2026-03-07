@@ -52,11 +52,12 @@ const archiveEntries = (await getCollection('archive')).sort(
         variant="dark"
       />
       <div class="timeline">
-        {timelineEntries.map(entry => (
+        {timelineEntries.map((entry, i) => (
           <TimelineItem
             year={entry.data.year}
             title={entry.data.title}
             description={entry.data.description}
+            index={i}
           />
         ))}
       </div>
