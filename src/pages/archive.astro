@@ -58,9 +58,7 @@ const categories = ['all', 'construction', 'architecture', 'community', 'maps'] 
       <p style="color:var(--warm-gray);font-size:0.95rem;margin-bottom:2rem">
         We're building an archive of Union Park Gardens — historical photos, documents, and images of the neighborhood today. If you have something to contribute, we'd love to see it.
       </p>
-      <form name="photo-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="photo-submission" />
-        <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <form action="https://formspree.io/f/xpqoqdrv" method="POST" enctype="multipart/form-data">
         <div class="form-group">
           <input type="text" name="name" placeholder="Your name" required class="form-input" />
         </div>
