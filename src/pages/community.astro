@@ -1,17 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
-import { getCollection } from 'astro:content';
 
-const events = (await getCollection('events'))
-  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
-  .filter(e => e.data.date >= new Date());
-
-const formatDate = (date: Date) =>
-  date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+const sections = [
+  { href: '/events', label: 'Events', description: 'Cleanups, meetings, and neighborhood gatherings.' },
+  { href: '/upgna', label: 'UPGNA', description: 'Meet the neighborhood association board.' },
+  { href: '/newsletters', label: 'Newsletters', description: 'Past updates and how to stay in the loop.' },
+  { href: '/contact', label: 'Contact Us', description: 'Questions, ideas, or just saying hello.' },
+];
 ---
 
-<BaseLayout title="Community" description="Get involved with Union Park Gardens — events, cleanup days, and ways to connect with your neighbors.">
+<BaseLayout title="Community" description="Get involved with Union Park Gardens — events, the neighborhood association, and ways to connect.">
   <section class="page-header">
     <div class="section-inner">
       <SectionHeader eyebrow="Get Involved" title="This is <em>your</em><br />neighborhood" />
@@ -19,67 +18,64 @@ const formatDate = (date: Date) =>
   </section>
 
   <section class="community-page">
-
-    {events.length > 0 && (
-      <div class="events-list">
-        <h3 style="font-family:var(--serif-display);font-size:1.5rem;font-weight:400;margin-bottom:2rem;text-align:center">Upcoming Events</h3>
-        {events.map(event => (
-          <div class="event-card">
-            <div class="event-date">
-              {formatDate(event.data.date)}
-              {event.data.time && ` · ${event.data.time}`}
-            </div>
-            <h3>{event.data.title}</h3>
-            <p>{event.data.description}</p>
-            {event.data.location && (
-              <p style="font-size:0.85rem;color:var(--warm-gray);margin-top:0.5rem;margin-bottom:0">{event.data.location}</p>
-            )}
-          </div>
+    <div class="community-landing">
+      <p class="lead" style="text-align:center;max-width:560px;margin:0 auto 3rem">
+        Union Park Gardens has always been a place where neighbors know each other. Whether you've lived here for decades or just moved in, there's a place for you.
+      </p>
+      <div class="community-grid">
+        {sections.map(section => (
+          <a href={section.href} class="community-card">
+            <h3>{section.label}</h3>
+            <p>{section.description}</p>
+          </a>
         ))}
       </div>
-    )}
-
-    <div class="involvement-section">
-      <h3>How to get involved</h3>
-      <p>
-        Union Park Gardens has always been a place where neighbors know each other. The neighborhood association holds quarterly meetings, organizes cleanup days, and works to preserve and celebrate what makes this community special.
-      </p>
-      <p>
-        Whether you've lived here for decades or just moved in, there's a place for you. We're always looking for volunteers to help with events, contribute to the photo archive, or simply show up and say hello.
-      </p>
-      <p>
-        And yes — the cats are welcome too.
-      </p>
     </div>
-
-    <div class="contact-section">
-      <h3>Get in touch</h3>
-      <form action="https://formspree.io/f/xkoporzw" method="POST">
-        <div class="form-group">
-          <input type="text" name="name" placeholder="Your name" required class="form-input" />
-        </div>
-        <div class="form-group">
-          <input type="email" name="email" placeholder="Your email" required class="form-input" />
-        </div>
-        <div class="form-group">
-          <textarea name="message" placeholder="Your message" class="form-input"></textarea>
-        </div>
-        <button type="submit" class="btn btn-dark">Send</button>
-      </form>
-    </div>
-
-    <div class="signup-section">
-      <h3>Stay in the loop</h3>
-      <p style="margin-bottom:1.5rem">
-        Sign up for occasional updates about events, neighborhood news, and the photo archive.
-      </p>
-      <form action="https://formspree.io/f/xvzvzaqo" method="POST">
-        <div class="signup-row">
-          <input type="email" name="email" placeholder="Your email" required class="form-input" />
-          <button type="submit" class="btn btn-dark">Subscribe</button>
-        </div>
-      </form>
-    </div>
-
   </section>
 </BaseLayout>
+
+<style>
+  .community-landing {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .community-card {
+    display: block;
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--parchment);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .community-card:hover {
+    border-color: var(--light-gray);
+    background: var(--cream);
+  }
+
+  .community-card h3 {
+    font-family: var(--serif-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--stone);
+    margin-bottom: 0.5rem;
+  }
+
+  .community-card p {
+    font-size: 0.95rem;
+    color: var(--warm-gray);
+    margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .community-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

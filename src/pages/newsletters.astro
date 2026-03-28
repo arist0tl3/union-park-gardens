@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { getCollection } from 'astro:content';
+
+const newsletters = (await getCollection('newsletters'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Newsletters" description="Past newsletters and updates from the Union Park Gardens neighborhood.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="News &<br /><em>Updates</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    <!-- Newsletter Archive -->
+    {newsletters.length > 0 && (
+      <div class="newsletter-archive">
+        {newsletters.map(issue => (
+          <a href={issue.data.url || issue.data.file} class="newsletter-card" target="_blank" rel="noopener">
+            <div class="newsletter-date">
+              {issue.data.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            </div>
+            <h3>{issue.data.title}</h3>
+            {issue.data.description && <p>{issue.data.description}</p>}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- Signup -->
+    <div class="signup-section">
+      <h3>Stay in the loop</h3>
+      <p style="margin-bottom:1.5rem">
+        Sign up for occasional updates about events, neighborhood news, and the photo archive.
+      </p>
+      <form action="https://formspree.io/f/xvzvzaqo" method="POST">
+        <div class="signup-row">
+          <input type="email" name="email" placeholder="Your email" required class="form-input" />
+          <button type="submit" class="btn btn-dark">Subscribe</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .newsletter-archive {
+    max-width: 680px;
+    margin: 0 auto 4rem;
+  }
+
+  .newsletter-card {
+    display: block;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--parchment);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .newsletter-card:first-child {
+    border-top: 1px solid var(--parchment);
+  }
+
+  .newsletter-card:hover {
+    opacity: 0.7;
+  }
+
+  .newsletter-date {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-card h3 {
+    font-family: var(--serif-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--stone);
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-card p {
+    font-size: 0.95rem;
+    color: var(--slate);
+    margin: 0;
+  }
+</style>

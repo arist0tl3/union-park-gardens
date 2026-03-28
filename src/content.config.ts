@@ -26,6 +26,17 @@ const events = defineCollection({
   }),
 });
 
+const newsletters = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/newsletters' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    description: z.string().optional(),
+    url: z.string().optional(),
+    file: z.string().optional(),
+  }),
+});
+
 const timeline = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/timeline' }),
   schema: z.object({
@@ -36,4 +47,4 @@ const timeline = defineCollection({
   }),
 });
 
-export const collections = { archive, events, timeline };
+export const collections = { archive, events, newsletters, timeline };

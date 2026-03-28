@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { getCollection } from 'astro:content';
+
+const events = (await getCollection('events'))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
+  .filter(e => e.data.date >= new Date());
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+---
+
+<BaseLayout title="Events" description="Upcoming events in Union Park Gardens — cleanups, meetings, and neighborhood gatherings.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="Upcoming<br /><em>Events</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    {events.length > 0 ? (
+      <div class="events-list">
+        {events.map(event => (
+          <div class="event-card">
+            <div class="event-date">
+              {formatDate(event.data.date)}
+              {event.data.time && ` · ${event.data.time}`}
+            </div>
+            <h3>{event.data.title}</h3>
+            <p>{event.data.description}</p>
+            {event.data.location && (
+              <p style="font-size:0.85rem;color:var(--warm-gray);margin-top:0.5rem;margin-bottom:0">{event.data.location}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="events-list" style="text-align:center">
+        <p style="color:var(--warm-gray)">No upcoming events right now. Check back soon!</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

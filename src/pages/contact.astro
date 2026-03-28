@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+---
+
+<BaseLayout title="Contact Us" description="Get in touch with the Union Park Gardens neighborhood.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="Get in<br /><em>Touch</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    <div class="contact-section">
+      <p style="margin-bottom:2rem">
+        Have a question, suggestion, or just want to say hello? Drop us a line.
+      </p>
+      <form action="https://formspree.io/f/xkoporzw" method="POST">
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Your name" required class="form-input" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Your email" required class="form-input" />
+        </div>
+        <div class="form-group">
+          <textarea name="message" placeholder="Your message" class="form-input"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark">Send</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
