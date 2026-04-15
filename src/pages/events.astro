@@ -8,7 +8,7 @@ const events = (await getCollection('events'))
   .filter(e => e.data.date >= new Date());
 
 const formatDate = (date: Date) =>
-  date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
 <BaseLayout title="Events" description="Upcoming events in Union Park Gardens — cleanups, meetings, and neighborhood gatherings.">
@@ -31,6 +31,9 @@ const formatDate = (date: Date) =>
             <p>{event.data.description}</p>
             {event.data.location && (
               <p style="font-size:0.85rem;color:var(--warm-gray);margin-top:0.5rem;margin-bottom:0">{event.data.location}</p>
+            )}
+            {event.data.link && (
+              <a href={event.data.link} target="_blank" rel="noopener" class="btn btn-dark" style="margin-top:1.5rem;display:inline-block">{event.data.linkLabel || 'Learn more'}</a>
             )}
           </div>
         ))}

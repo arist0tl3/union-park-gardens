@@ -1,6 +1,7 @@
 export const FEATURE_FLAGS = {
   architecturePage: false,
   merchPage: false,
+  upgnaPage: false,
 } as const;
 
 export const SITE = {

@@ -37,6 +37,7 @@ const newsletters = (await getCollection('newsletters'))
         Sign up for occasional updates about events, neighborhood news, and the photo archive.
       </p>
       <form action="https://formspree.io/f/xvzvzaqo" method="POST">
+        <input type="hidden" name="_next" value="https://unionparkgardens.com/thanks/newsletter" />
         <div class="signup-row">
           <input type="email" name="email" placeholder="Your email" required class="form-input" />
           <button type="submit" class="btn btn-dark">Subscribe</button>

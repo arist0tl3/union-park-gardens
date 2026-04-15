@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+---
+
+<BaseLayout title="Thank You" description="Thanks for reaching out to Union Park Gardens.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Contact" title="Message<br /><em>received</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    <div class="thanks-section">
+      <p>Thanks for reaching out! We appreciate you taking the time to get in touch.</p>
+      <p>We'll do our best to get back to you within 3 business days.</p>
+      <a href="/" class="btn btn-dark">Back to home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks-section {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .thanks-section p {
+    color: var(--warm-gray);
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+</style>

@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
+import { FEATURE_FLAGS } from '../config';
 
 const sections = [
   { href: '/events', label: 'Events', description: 'Cleanups, meetings, and neighborhood gatherings.' },
-  { href: '/upgna', label: 'UPGNA', description: 'Meet the neighborhood association board.' },
+  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA', description: 'Meet the neighborhood association board.' }] : []),
   { href: '/newsletters', label: 'Newsletters', description: 'Past updates and how to stay in the loop.' },
   { href: '/contact', label: 'Contact Us', description: 'Questions, ideas, or just saying hello.' },
 ];

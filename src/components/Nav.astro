@@ -9,7 +9,7 @@ const { currentPath } = Astro.props;
 
 const communityLinks = [
   { href: '/events', label: 'Events' },
-  { href: '/upgna', label: 'UPGNA' },
+  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA' }] : []),
   { href: '/newsletters', label: 'Newsletters' },
   { href: '/contact', label: 'Contact Us' },
 ];
@@ -21,7 +21,7 @@ const links = [
   ...(FEATURE_FLAGS.merchPage ? [{ href: '/merch', label: 'Merch' }] : []),
 ];
 
-const isCommunityActive = ['/community', '/events', '/upgna', '/newsletters', '/contact'].some(p => currentPath.startsWith(p));
+const isCommunityActive = ['/community', '/events', ...(FEATURE_FLAGS.upgnaPage ? ['/upgna'] : []), '/newsletters', '/contact'].some(p => currentPath.startsWith(p));
 ---
 
 <nav>

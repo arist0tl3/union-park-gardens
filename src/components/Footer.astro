@@ -6,7 +6,7 @@ const links = [
   { href: '/archive', label: 'Archive' },
   ...(FEATURE_FLAGS.architecturePage ? [{ href: '/architecture', label: 'Architecture' }] : []),
   { href: '/events', label: 'Events' },
-  { href: '/upgna', label: 'UPGNA' },
+  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA' }] : []),
   { href: '/newsletters', label: 'Newsletters' },
   { href: '/contact', label: 'Contact' },
   ...(FEATURE_FLAGS.merchPage ? [{ href: '/merch', label: 'Merch' }] : []),
