@@ -17,7 +17,7 @@ const archive = defineCollection({
 
 const events = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     date: z.coerce.date(),
     description: z.string(),
@@ -25,6 +25,12 @@ const events = defineCollection({
     time: z.string().optional(),
     link: z.string().optional(),
     linkLabel: z.string().optional(),
+    recap: z.string().optional(),
+    photos: z.array(z.object({
+      src: image(),
+      alt: z.string(),
+      featured: z.boolean().optional(),
+    })).optional(),
   }),
 });
 

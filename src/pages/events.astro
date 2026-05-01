@@ -1,47 +1,321 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
-const events = (await getCollection('events'))
-  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
-  .filter(e => e.data.date >= new Date());
+const now = new Date();
+const all = (await getCollection('events'));
+
+const upcoming = all
+  .filter(e => e.data.date >= now)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const past = all
+  .filter(e => e.data.date < now)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+// Order photos: featured first, then the rest
+const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] | undefined) => {
+  if (!photos || photos.length === 0) return [];
+  const featured = photos.filter(p => p.featured);
+  const rest = photos.filter(p => !p.featured);
+  return [...featured, ...rest];
+};
 ---
 
-<BaseLayout title="Events" description="Upcoming events in Union Park Gardens — cleanups, meetings, and neighborhood gatherings.">
+<BaseLayout title="Events" description="Upcoming and past events in Union Park Gardens — cleanups, meetings, and neighborhood gatherings.">
   <section class="page-header">
     <div class="section-inner">
-      <SectionHeader eyebrow="Community" title="Upcoming<br /><em>Events</em>" />
+      <SectionHeader eyebrow="Community" title="Events" />
     </div>
   </section>
 
   <section class="community-page">
-    {events.length > 0 ? (
-      <div class="events-list">
-        {events.map(event => (
-          <div class="event-card">
-            <div class="event-date">
-              {formatDate(event.data.date)}
-              {event.data.time && ` · ${event.data.time}`}
+    <div class="events-section">
+      <h2 class="events-section-title">Upcoming</h2>
+      {upcoming.length > 0 ? (
+        <div class="events-list">
+          {upcoming.map(event => (
+            <div class="event-card">
+              <div class="event-date">
+                {formatDate(event.data.date)}
+                {event.data.time && ` · ${event.data.time}`}
+              </div>
+              <h3>{event.data.title}</h3>
+              <p>{event.data.description}</p>
+              {event.data.location && (
+                <p class="event-location">{event.data.location}</p>
+              )}
+              {event.data.link && (
+                <a href={event.data.link} target="_blank" rel="noopener" class="btn btn-dark event-cta">{event.data.linkLabel || 'Learn more'}</a>
+              )}
             </div>
-            <h3>{event.data.title}</h3>
-            <p>{event.data.description}</p>
-            {event.data.location && (
-              <p style="font-size:0.85rem;color:var(--warm-gray);margin-top:0.5rem;margin-bottom:0">{event.data.location}</p>
-            )}
-            {event.data.link && (
-              <a href={event.data.link} target="_blank" rel="noopener" class="btn btn-dark" style="margin-top:1.5rem;display:inline-block">{event.data.linkLabel || 'Learn more'}</a>
-            )}
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="events-list" style="text-align:center">
-        <p style="color:var(--warm-gray)">No upcoming events right now. Check back soon!</p>
+          ))}
+        </div>
+      ) : (
+        <div class="events-empty">
+          <p>No upcoming events right now. Check back soon!</p>
+        </div>
+      )}
+    </div>
+
+    {past.length > 0 && (
+      <div class="events-section">
+        <h2 class="events-section-title">Past</h2>
+        <div class="events-list past-events">
+          {past.map(event => {
+            const photos = orderedPhotos(event.data.photos);
+            const main = photos[0];
+            const thumbs = photos.slice(1);
+            return (
+              <article class="past-event">
+                <div class="event-date">
+                  {formatDate(event.data.date)}
+                </div>
+                <h3>{event.data.title}</h3>
+                {event.data.recap && <p class="event-recap">{event.data.recap}</p>}
+                {photos.length > 0 && (
+                  <div class="event-photos">
+                    {main && (
+                      <button
+                        type="button"
+                        class="event-photo event-photo-main lightbox-trigger"
+                        data-full={main.src.src}
+                        data-alt={main.alt}
+                        aria-label={`Open larger image: ${main.alt}`}
+                      >
+                        <Image src={main.src} alt={main.alt} widths={[600, 1200]} sizes="(min-width: 720px) 720px, 100vw" />
+                      </button>
+                    )}
+                    {thumbs.length > 0 && (
+                      <div class="event-photo-thumbs">
+                        {thumbs.map(p => (
+                          <button
+                            type="button"
+                            class="event-photo event-photo-thumb lightbox-trigger"
+                            data-full={p.src.src}
+                            data-alt={p.alt}
+                            aria-label={`Open larger image: ${p.alt}`}
+                          >
+                            <Image src={p.src} alt={p.alt} widths={[300, 600]} sizes="(min-width: 720px) 240px, 50vw" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
       </div>
     )}
   </section>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button type="button" class="lightbox-close" aria-label="Close image viewer">&times;</button>
+    <img class="lightbox-img" alt="" />
+  </div>
 </BaseLayout>
+
+<style>
+  .events-section {
+    max-width: 780px;
+    margin: 0 auto 4rem;
+  }
+
+  .events-section-title {
+    font-family: var(--serif-display);
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--stone);
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--parchment);
+  }
+
+  .events-list {
+    margin: 0;
+  }
+
+  .events-empty {
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--warm-gray);
+  }
+
+  .event-location {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .event-cta {
+    margin-top: 1.5rem;
+    display: inline-block;
+  }
+
+  .past-event {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--parchment);
+  }
+
+  .past-event:last-child {
+    border-bottom: none;
+  }
+
+  .event-recap {
+    font-size: 0.95rem;
+    color: var(--slate);
+    margin: 0 0 1.25rem;
+    white-space: pre-line;
+  }
+
+  .event-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .event-photo {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: zoom-in;
+    overflow: hidden;
+    border-radius: 4px;
+    display: block;
+    line-height: 0;
+  }
+
+  .event-photo :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .event-photo:hover :global(img),
+  .event-photo:focus-visible :global(img) {
+    transform: scale(1.02);
+  }
+
+  .event-photo:focus-visible {
+    outline: 2px solid var(--stone);
+    outline-offset: 2px;
+  }
+
+  .event-photo-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .event-photo-thumb :global(img) {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 20, 20, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+    cursor: zoom-out;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: default;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: 0;
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .lightbox-close:hover,
+  .lightbox-close:focus-visible {
+    color: var(--parchment);
+    outline: none;
+  }
+
+  @media (max-width: 600px) {
+    .events-section-title {
+      font-size: 1.4rem;
+    }
+    .event-photo-thumbs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = lightbox?.querySelector('.lightbox-img') as HTMLImageElement | null;
+  const closeBtn = lightbox?.querySelector('.lightbox-close');
+
+  const open = (src: string, alt: string) => {
+    if (!lightbox || !lightboxImg) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const close = () => {
+    if (!lightbox || !lightboxImg) return;
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('.lightbox-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const src = btn.dataset.full;
+      const alt = btn.dataset.alt || '';
+      if (src) open(src, alt);
+    });
+  });
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+
+  closeBtn?.addEventListener('click', close);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox?.classList.contains('open')) close();
+  });
+</script>
