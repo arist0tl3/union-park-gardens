@@ -873,6 +873,11 @@ textarea.form-input {
   background: var(--paper);
 }
 
+/* Tighten the gap between a page header and the section that follows */
+.page-header + section {
+  padding-top: 1rem;
+}
+
 /* HAMBURGER MENU */
 .nav-hamburger {
   display: none;
