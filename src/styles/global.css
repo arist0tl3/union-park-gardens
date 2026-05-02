@@ -873,13 +873,6 @@ textarea.form-input {
   background: var(--paper);
 }
 
-/* Tighten the gap between a page header and the section that follows.
-   `section { padding: 6rem 3rem }` would otherwise stack with the header's
-   bottom padding for ~10rem of empty space between the title and content. */
-.page-header + section {
-  padding-top: 1rem;
-}
-
 /* HAMBURGER MENU */
 .nav-hamburger {
   display: none;
