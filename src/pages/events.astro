@@ -123,21 +123,6 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
 </BaseLayout>
 
 <style>
-  /* Tighten the page header on this page so past events appear higher on the fold */
-  .page-header {
-    padding: 4rem 3rem 1rem;
-  }
-  .page-header :global(.section-title) {
-    margin-bottom: 0;
-  }
-  .page-header :global(.rule) {
-    margin-bottom: 1.25rem;
-  }
-
-  .community-page {
-    padding-top: 1rem;
-  }
-
   .events-section {
     max-width: 780px;
     margin: 0 auto 3rem;
@@ -165,12 +150,6 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
     padding: 1rem 0;
     text-align: center;
     color: var(--warm-gray);
-  }
-
-  @media (max-width: 800px) {
-    .page-header {
-      padding: 5rem 1.5rem 1rem;
-    }
   }
 
   .event-location {
