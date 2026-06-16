@@ -69,6 +69,12 @@ const positions = [
       <div class="positions-list">
         {positions.map(position => (
           <div class="position">
+            <div class="position-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="8.5" r="4" fill="currentColor" />
+                <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="currentColor" />
+              </svg>
+            </div>
             <div class="position-title">{position.title}</div>
             <div class="position-name">{position.name}</div>
             <p class="position-desc">{position.description}</p>
@@ -119,11 +125,34 @@ const positions = [
   }
 
   .positions-list {
-    max-width: 680px;
+    max-width: 720px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem 3rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem 2rem;
+  }
+
+  .position {
+    text-align: center;
+  }
+
+  .position-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    background: var(--parchment);
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .position-avatar svg {
+    width: 70%;
+    height: 70%;
+    margin-top: 12%;
   }
 
   .position-title {
@@ -142,15 +171,21 @@ const positions = [
   }
 
   .position-desc {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--slate);
     margin: 0;
   }
 
   @media (max-width: 700px) {
     .positions-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .positions-list {
       grid-template-columns: 1fr;
-      gap: 2rem;
     }
   }
 </style>

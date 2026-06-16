@@ -25,9 +25,31 @@ const formatDate = (date: Date) =>
   date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
 
 const nextFoodTruck = FOOD_TRUCK.schedule[0];
+const nextEvent = upcoming[0];
+const foodTruckDays = FOOD_TRUCK.schedule.map(s => s.day).join(' & ');
+const shortDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 ---
 
 <BaseLayout>
+  {(nextEvent || FOOD_TRUCK.schedule.length > 0) && (
+    <a href="/events" class="home-banner">
+      {nextEvent && (
+        <span class="home-banner-item">
+          <span class="home-banner-label">Next</span>
+          {nextEvent.data.title} · {shortDate(nextEvent.data.date)}
+        </span>
+      )}
+      {FOOD_TRUCK.schedule.length > 0 && (
+        <span class="home-banner-item secondary">
+          <span class="home-banner-label">Food Trucks</span>
+          {foodTruckDays}
+        </span>
+      )}
+      <span class="home-banner-cta">View all &rarr;</span>
+    </a>
+  )}
+
   <Hero
     eyebrow="Wilmington, Delaware · Est. 1918"
     title="Union Park<br /><em>Gardens</em>"
@@ -79,11 +101,11 @@ const nextFoodTruck = FOOD_TRUCK.schedule[0];
         <p style="text-align:center;color:var(--warm-gray);font-style:italic;margin-top:-1rem;margin-bottom:2.5rem">
           {recentWithPhotos.data.title}
         </p>
-        <div class="photo-grid">
+        <div class="home-gallery">
           {recentPhotos.slice(0, 3).map(photo => (
-            <div class="photo-item">
-              <Image src={photo.src} alt={photo.alt} widths={[400, 800]} sizes="(min-width: 720px) 460px, 100vw" />
-            </div>
+            <a href="/events" class="home-gallery-item">
+              <Image src={photo.src} alt={photo.alt} widths={[400, 800]} sizes="(min-width: 720px) 300px, 100vw" />
+            </a>
           ))}
         </div>
         <div style="text-align:center;margin-top:2.5rem">
@@ -131,7 +153,87 @@ const nextFoodTruck = FOOD_TRUCK.schedule[0];
   </section>
 </BaseLayout>
 
+<!-- Home-only: shift the fixed nav down so the announcement banner sits above it -->
+<style is:global>
+  nav { top: 2.6rem; }
+</style>
+
 <style>
+  .home-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: 2.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+    background: var(--stone);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .home-banner-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .home-banner-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: rgba(245, 242, 236, 0.16);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .home-banner-cta {
+    color: var(--light-gray);
+    flex-shrink: 0;
+  }
+
+  .home-banner:hover .home-banner-cta {
+    color: var(--paper);
+  }
+
+  .home-gallery {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .home-gallery-item {
+    display: block;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .home-gallery-item :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.4s ease, transform 0.4s ease;
+  }
+
+  .home-gallery-item:hover :global(img) {
+    filter: grayscale(50%);
+    transform: scale(1.03);
+  }
+
   .happening-section {
     background: var(--paper);
   }
@@ -221,6 +323,19 @@ const nextFoodTruck = FOOD_TRUCK.schedule[0];
     .foodtruck-strip {
       flex-direction: column;
       align-items: flex-start;
+    }
+    .home-gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .home-banner {
+      gap: 1rem;
+      font-size: 0.72rem;
+    }
+    .home-banner-item.secondary {
+      display: none;
     }
   }
 </style>
