@@ -4,9 +4,11 @@ import SectionHeader from '../components/SectionHeader.astro';
 import { FEATURE_FLAGS } from '../config';
 
 const sections = [
-  { href: '/events', label: 'Events', description: 'Cleanups, meetings, and neighborhood gatherings.' },
-  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA', description: 'Meet the neighborhood association board.' }] : []),
+  { href: '/events', label: 'Events', description: 'Cleanups, meetings, food trucks, and neighborhood gatherings.' },
+  ...(FEATURE_FLAGS.councilPage ? [{ href: '/council', label: 'Neighborhood Council', description: 'Meet the council and learn how to get involved.' }] : []),
+  ...(FEATURE_FLAGS.businessesPage ? [{ href: '/businesses', label: 'Small Businesses', description: 'Goods and services from your neighbors.' }] : []),
   { href: '/newsletters', label: 'Newsletters', description: 'Past updates and how to stay in the loop.' },
+  ...(FEATURE_FLAGS.faqsPage ? [{ href: '/faqs', label: 'FAQs', description: 'Police, 311, animal control, and local officials.' }] : []),
   { href: '/contact', label: 'Contact Us', description: 'Questions, ideas, or just saying hello.' },
 ];
 ---

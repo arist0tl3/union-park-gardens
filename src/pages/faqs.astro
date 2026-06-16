@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+// NOTE FOR EDITORS: phone numbers below are marked "confirm" — verify the
+// current Wilmington / New Castle County / Delaware numbers before publishing.
+// The linked official websites are the most reliable source if a number changes.
+const resources = [
+  {
+    title: 'Emergencies & police',
+    when: 'A crime in progress, a fire, a medical emergency, or anyone in immediate danger.',
+    how: 'Call 911. For non-urgent matters — a past incident, noise, a suspicious vehicle, or to file a report — use the Wilmington Police non-emergency line.',
+    phone: 'Non-emergency: confirm number',
+    url: 'https://www.wilmingtonde.gov/government/public-safety/wilmington-police-department',
+    urlLabel: 'Wilmington Police Department',
+  },
+  {
+    title: '311 & city services',
+    when: 'Potholes, missed trash or recycling pickup, streetlight outages, graffiti, illegal dumping, and other non-emergency city issues.',
+    how: 'Report online or by phone through the City of Wilmington. You can usually track the status of your request.',
+    phone: 'City services: confirm number',
+    url: 'https://www.wilmingtonde.gov',
+    urlLabel: 'City of Wilmington',
+  },
+  {
+    title: 'Animal control',
+    when: 'A stray, injured, or aggressive animal, animal neglect or cruelty, or questions about wildlife. (Our neighborhood cats are part of the family — but call if one needs help.)',
+    how: 'Delaware Animal Services / the Office of Animal Welfare handles animal control statewide.',
+    phone: 'Animal services: confirm number',
+    url: 'https://dhss.delaware.gov/dhss/dph/oaw/oaw.html',
+    urlLabel: 'Delaware Office of Animal Welfare',
+  },
+  {
+    title: 'City Council',
+    when: 'Neighborhood concerns that need a local representative — zoning, development, city services, or ongoing problems the council can advocate on.',
+    how: 'Find your Wilmington City Council district and representative, plus meeting schedules and agendas.',
+    url: 'https://www.wilmingtonde.gov/government/city-council',
+    urlLabel: 'Wilmington City Council',
+  },
+  {
+    title: 'State representatives',
+    when: 'State-level issues — legislation, state services, or matters beyond the city’s authority.',
+    how: 'Look up your Delaware State Representative and Senator by address.',
+    url: 'https://legis.delaware.gov/FindMyLegislator',
+    urlLabel: 'Find My Legislator (Delaware)',
+  },
+];
+---
+
+<BaseLayout title="FAQs & Local Resources" description="Who to contact for common neighborhood issues in Union Park Gardens — police, 311, animal control, and local officials.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="FAQs &amp;<br /><em>Local Resources</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    <p class="faqs-intro">
+      A quick guide to handling common neighborhood situations and reaching the right people. When in doubt about an emergency, always call <strong>911</strong>.
+    </p>
+
+    <div class="faqs-list">
+      {resources.map(item => (
+        <div class="faq-item">
+          <h3>{item.title}</h3>
+          <p class="faq-when"><span class="faq-label">When:</span> {item.when}</p>
+          <p class="faq-how"><span class="faq-label">How:</span> {item.how}</p>
+          {item.phone && <p class="faq-phone">{item.phone}</p>}
+          {item.url && (
+            <a href={item.url} target="_blank" rel="noopener" class="faq-link">{item.urlLabel} &rarr;</a>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header + .community-page {
+    padding-top: 1rem;
+  }
+
+  .faqs-intro {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    color: var(--slate);
+  }
+
+  .faqs-list {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--parchment);
+  }
+
+  .faq-item:first-child {
+    border-top: 1px solid var(--parchment);
+  }
+
+  .faq-item h3 {
+    font-family: var(--serif-display);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--stone);
+    margin-bottom: 1rem;
+  }
+
+  .faq-when,
+  .faq-how {
+    font-size: 0.95rem;
+    color: var(--slate);
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-right: 0.35rem;
+  }
+
+  .faq-phone {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    font-style: italic;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-link {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--stone);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { SITE, FOOD_TRUCK as foodTruck } from '../config';
 
 const now = new Date();
 const all = (await getCollection('events'));
@@ -63,6 +64,22 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
       )}
     </div>
 
+    {foodTruck.schedule.length > 0 && (
+      <div class="events-section">
+        <h2 class="events-section-title">Food Trucks</h2>
+        <div class="foodtruck-list">
+          {foodTruck.schedule.map(slot => (
+            <div class="foodtruck-row">
+              <div class="foodtruck-day">{slot.day}</div>
+              <div class="foodtruck-vendor">{slot.vendor}</div>
+              <div class="foodtruck-time">{slot.time}</div>
+            </div>
+          ))}
+        </div>
+        {foodTruck.note && <p class="foodtruck-note">{foodTruck.note}</p>}
+      </div>
+    )}
+
     {past.length > 0 && (
       <div class="events-section">
         <h2 class="events-section-title">Past</h2>
@@ -114,6 +131,16 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
         </div>
       </div>
     )}
+
+    <div class="events-section">
+      <div class="involvement-section">
+        <h3>Help plan an event</h3>
+        <p style="margin-bottom:1.5rem">
+          Want to join the events committee or suggest a gathering, cleanup, or food truck? We’d love the help.
+        </p>
+        <a href={`mailto:${SITE.email}?subject=Events committee`} class="btn btn-dark">Email the committee</a>
+      </div>
+    </div>
   </section>
 
   <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -166,6 +193,43 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
   .event-cta {
     margin-top: 1.5rem;
     display: inline-block;
+  }
+
+  .foodtruck-list {
+    border-top: 1px solid var(--parchment);
+  }
+
+  .foodtruck-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--parchment);
+  }
+
+  .foodtruck-day {
+    font-family: var(--serif-display);
+    font-size: 1.05rem;
+    color: var(--stone);
+  }
+
+  .foodtruck-vendor {
+    color: var(--slate);
+  }
+
+  .foodtruck-time {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--warm-gray);
+    text-align: right;
+  }
+
+  .foodtruck-note {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    font-style: italic;
+    margin: 1rem 0 0;
   }
 
   .past-event {
@@ -283,6 +347,13 @@ const orderedPhotos = (photos: { src: any; alt: string; featured?: boolean }[] |
     }
     .event-photo-thumbs {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .foodtruck-row {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+    .foodtruck-time {
+      text-align: left;
     }
   }
 </style>

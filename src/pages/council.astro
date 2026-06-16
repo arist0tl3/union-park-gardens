@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { SITE } from '../config';
+
+// PLACEHOLDER CONTENT — replace names and tweak descriptions/positions
+// before publishing. Keep first name + role only if neighbors prefer not to
+// list full names publicly.
+const positions = [
+  {
+    title: 'President',
+    name: 'Name TBD',
+    description: 'Leads council meetings, sets the agenda, and represents the neighborhood with the city.',
+  },
+  {
+    title: 'Vice President',
+    name: 'Name TBD',
+    description: 'Supports the president and steps in to lead when needed.',
+  },
+  {
+    title: 'Treasurer',
+    name: 'Name TBD',
+    description: 'Tracks the council’s funds and reports on spending.',
+  },
+  {
+    title: 'Secretary',
+    name: 'Name TBD',
+    description: 'Keeps meeting minutes and the neighborhood’s records.',
+  },
+  {
+    title: 'Events Coordinator',
+    name: 'Name TBD',
+    description: 'Organizes cleanups, gatherings, and the food truck schedule.',
+  },
+  {
+    title: 'Communications',
+    name: 'Name TBD',
+    description: 'Produces the quarterly newsletter and keeps this website current.',
+  },
+];
+---
+
+<BaseLayout title="Neighborhood Council" description="Meet the Union Park Gardens Neighborhood Council and learn how to get involved.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="Neighborhood<br /><em>Council</em>" />
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="community-page">
+    <div class="council-intro">
+      <p class="lead">
+        The Union Park Gardens Neighborhood Council works to preserve the character of the neighborhood, advocate for residents, and bring people together.
+      </p>
+      <p>
+        The council organizes quarterly meetings, coordinates with the city on neighborhood matters, plans community events, and helps maintain the shared spaces that make Union Park Gardens special.
+      </p>
+      <p>
+        Meetings are open to all residents. Check the <a href="/events">events page</a> for the next one.
+      </p>
+    </div>
+  </section>
+
+  <!-- Positions -->
+  <section class="board-section">
+    <div class="section-inner">
+      <h3 class="board-heading">The Council</h3>
+      <div class="positions-list">
+        {positions.map(position => (
+          <div class="position">
+            <div class="position-title">{position.title}</div>
+            <div class="position-name">{position.name}</div>
+            <p class="position-desc">{position.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Get involved -->
+  <section class="community-page">
+    <div class="involvement-section">
+      <h3>Interested in joining?</h3>
+      <p style="margin-bottom:1.5rem">
+        We’re always looking for neighbors who want to help. Reach out and let us know which role interests you — or just tell us how you’d like to pitch in.
+      </p>
+      <a href={`mailto:${SITE.email}?subject=Interested in the Neighborhood Council`} class="btn btn-dark">Email the council</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header + .community-page {
+    padding-top: 1rem;
+  }
+
+  .council-intro {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .council-intro a {
+    color: var(--stone);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .board-section {
+    background: var(--cream);
+  }
+
+  .board-heading {
+    font-family: var(--serif-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .positions-list {
+    max-width: 680px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem 3rem;
+  }
+
+  .position-title {
+    font-family: var(--serif-display);
+    font-size: 1.2rem;
+    color: var(--stone);
+    margin-bottom: 0.25rem;
+  }
+
+  .position-name {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.75rem;
+  }
+
+  .position-desc {
+    font-size: 0.95rem;
+    color: var(--slate);
+    margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .positions-list {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>
