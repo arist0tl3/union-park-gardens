@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../config';
+
+const businesses = (await getCollection('businesses'))
+  .sort((a, b) => (a.data.sortOrder ?? 999) - (b.data.sortOrder ?? 999));
+---
+
+<BaseLayout title="Small Businesses" description="Goods and services offered by your neighbors in Union Park Gardens.">
+  <section class="page-header">
+    <div class="section-inner">
+      <SectionHeader eyebrow="Community" title="Neighborhood<br /><em>Businesses</em>" />
+    </div>
+  </section>
+
+  <section class="community-page">
+    <p class="businesses-intro">
+      Union Park Gardens is home to bakers, builders, makers, and more. When you can, support a neighbor.
+    </p>
+
+    {businesses.length > 0 ? (
+      <div class="businesses-list">
+        {businesses.map(biz => (
+          <div class="business-card">
+            <div class="business-head">
+              <h3>{biz.data.name}</h3>
+              {biz.data.category && <span class="business-category">{biz.data.category}</span>}
+            </div>
+            <p class="business-desc">{biz.data.description}</p>
+            {biz.data.url && (
+              <a href={biz.data.url} target="_blank" rel="noopener" class="business-link">Visit website &rarr;</a>
+            )}
+            {!biz.data.url && biz.data.contact && (
+              <a href={`mailto:${biz.data.contact}`} class="business-link">{biz.data.contact}</a>
+            )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p class="businesses-empty">No listings yet — check back soon.</p>
+    )}
+
+    <div class="involvement-section">
+      <h3>Run a business here?</h3>
+      <p style="margin-bottom:1.5rem">
+        If you live in Union Park Gardens and offer a good or service, we’d be glad to add you to this list.
+      </p>
+      <a href={`mailto:${SITE.email}?subject=Add my business`} class="btn btn-dark">Email to be listed</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header + .community-page {
+    padding-top: 1rem;
+  }
+
+  .businesses-intro {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    color: var(--slate);
+  }
+
+  .businesses-list {
+    max-width: 680px;
+    margin: 0 auto 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .business-card {
+    padding: 1.75rem;
+    border: 1px solid var(--parchment);
+    background: var(--cream);
+  }
+
+  .business-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .business-card h3 {
+    font-family: var(--serif-display);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--stone);
+    margin: 0;
+  }
+
+  .business-category {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    white-space: nowrap;
+  }
+
+  .business-desc {
+    font-size: 0.95rem;
+    color: var(--slate);
+    margin: 0 0 1rem;
+  }
+
+  .business-link {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--stone);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .businesses-empty {
+    text-align: center;
+    color: var(--warm-gray);
+    margin-bottom: 4rem;
+  }
+
+  @media (max-width: 700px) {
+    .businesses-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

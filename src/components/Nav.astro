@@ -9,8 +9,10 @@ const { currentPath } = Astro.props;
 
 const communityLinks = [
   { href: '/events', label: 'Events' },
-  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA' }] : []),
+  ...(FEATURE_FLAGS.councilPage ? [{ href: '/council', label: 'Neighborhood Council' }] : []),
+  ...(FEATURE_FLAGS.businessesPage ? [{ href: '/businesses', label: 'Small Businesses' }] : []),
   { href: '/newsletters', label: 'Newsletters' },
+  ...(FEATURE_FLAGS.faqsPage ? [{ href: '/faqs', label: 'FAQs' }] : []),
   { href: '/contact', label: 'Contact Us' },
 ];
 
@@ -21,7 +23,7 @@ const links = [
   ...(FEATURE_FLAGS.merchPage ? [{ href: '/merch', label: 'Merch' }] : []),
 ];
 
-const isCommunityActive = ['/community', '/events', ...(FEATURE_FLAGS.upgnaPage ? ['/upgna'] : []), '/newsletters', '/contact'].some(p => currentPath.startsWith(p));
+const isCommunityActive = ['/community', ...communityLinks.map(l => l.href)].some(p => currentPath.startsWith(p));
 ---
 
 <nav>

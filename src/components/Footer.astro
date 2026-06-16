@@ -6,8 +6,10 @@ const links = [
   { href: '/archive', label: 'Archive' },
   ...(FEATURE_FLAGS.architecturePage ? [{ href: '/architecture', label: 'Architecture' }] : []),
   { href: '/events', label: 'Events' },
-  ...(FEATURE_FLAGS.upgnaPage ? [{ href: '/upgna', label: 'UPGNA' }] : []),
+  ...(FEATURE_FLAGS.councilPage ? [{ href: '/council', label: 'Council' }] : []),
+  ...(FEATURE_FLAGS.businessesPage ? [{ href: '/businesses', label: 'Small Businesses' }] : []),
   { href: '/newsletters', label: 'Newsletters' },
+  ...(FEATURE_FLAGS.faqsPage ? [{ href: '/faqs', label: 'FAQs' }] : []),
   { href: '/contact', label: 'Contact' },
   ...(FEATURE_FLAGS.merchPage ? [{ href: '/merch', label: 'Merch' }] : []),
 ];
